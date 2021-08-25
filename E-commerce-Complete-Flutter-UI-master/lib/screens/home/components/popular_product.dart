@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_app/components/product_card.dart';
+import 'package:shop_app/models/Product.dart';
+
 import '../../../size_config.dart';
 import 'section_title.dart';
-import 'package:provider/provider.dart';
 
 class PopularProducts extends StatelessWidget {
   @override
@@ -19,28 +20,21 @@ class PopularProducts extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              /*...List.generate(
-                Future<int> nbItems = getNbItems(),
+              ...List.generate(
+                demoProducts.length,
                 (index) {
-                  //if (demoProducts[index].isPopular)
-                  return ProductCard(product: demoProducts[index]);
+                  if (demoProducts[index].isPopular)
+                    return ProductCard(product: demoProducts[index]);
 
-                  //return SizedBox
-                  // .shrink(); // here by default width and height is 0
+                  return SizedBox
+                      .shrink(); // here by default width and height is 0
                 },
-              ),*/
+              ),
               SizedBox(width: getProportionateScreenWidth(20)),
             ],
           ),
         )
       ],
     );
-  }
-
-  Future<int> getNbItems() async {
-    return await FirebaseFirestore.instance
-        .collection('products')
-        .snapshots()
-        .length;
   }
 }
