@@ -6,50 +6,52 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //create user obj based on FirebaseUser
-  User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+  UserModel _userFromFirebaseUser(User user) {
+    return user != null ? UserModel(uid: user.uid) : null;
   }
 
   //auth change user stream
-  Stream<User> get user {
-    return _auth.onAuthStateChanged
-        .map((FirebaseUser user) => _userFromFirebaseUser(user));
+  Stream<UserModel> get user {
+    return _auth
+        .authStateChanges()
+        .map((User user) => _userFromFirebaseUser(user));
   }
 
-  //sign in with email and password
-  Future signInWithEmailAndPassword(String email, String password) async {
+  //register
+  Future<UserCredential> registerUser(email, password, String firstName,
+      String lastName, String phoneNumber, String address) async {
+    UserCredential userCredential;
     try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
-  //register with email and password
-  Future registerWithEmailAndPassword(
-      String email,
-      String password,
-      String firstName,
-      String lastName,
-      String phoneNumber,
-      String address) async {
-    try {
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-
-      //create new document for the user with uid
-      await DatabaseService(uid: user.uid).updateUserData(
+      userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await DatabaseService(uid: userCredential.user.uid).updateUserData(
           email, password, firstName, lastName, phoneNumber, address);
-      return _userFromFirebaseUser(user);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
     } catch (e) {
-      print(e.toString());
-      return null;
+      print(e);
     }
+    return userCredential;
+  }
+
+  //sign in
+  Future<UserCredential> signInUser(email, password) async {
+    UserCredential userCredential;
+    try {
+      userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+    return userCredential;
   }
 
   //sign out

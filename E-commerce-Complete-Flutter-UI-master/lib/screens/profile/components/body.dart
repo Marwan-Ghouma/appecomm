@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/add_product/add_product_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/services/auth.dart';
 
@@ -22,9 +23,12 @@ class Body extends StatelessWidget {
             press: () => {},
           ),
           ProfileMenu(
-            text: "Notifications",
-            icon: "assets/icons/Bell.svg",
-            press: () {},
+            text: "Add Product",
+            icon: "assets/icons/Shop Icon.svg",
+            press: () {
+              //Navigator.pushNamed(context, AddProductScreen.routeName);
+              Navigator.popAndPushNamed(context, AddProductScreen.routeName);
+            },
           ),
           ProfileMenu(
             text: "Settings",

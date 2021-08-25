@@ -10,7 +10,7 @@ class Wrapper extends StatelessWidget {
   static String routeName = "/wrapper";
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user = Provider.of<UserModel>(context);
     //return either home or auth
 
     if (user == null) {

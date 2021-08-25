@@ -69,7 +69,7 @@ class _SignUpFormState extends State<SignUpForm> {
             press: () async {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                dynamic result = await _auth.registerWithEmailAndPassword(
+                dynamic result = await _auth.registerUser(
                     email, password, firstName, lastName, phoneNumber, address);
                 if (result == null) {
                   print("SIGNIN UP ERROR");
