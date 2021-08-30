@@ -32,8 +32,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Aggricus shop',
         theme: theme(),
-        // home: SplashScreen(),
-        // We use routeName so that we dont need to remember the name
         builder: EasyLoading.init(),
         initialRoute: Wrapper.routeName,
         routes: routes,

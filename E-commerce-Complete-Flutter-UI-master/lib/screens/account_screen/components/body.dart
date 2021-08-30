@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/components/socal_card.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/size_config.dart';
-
-import 'sign_up_form.dart';
+import 'account_form.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -17,14 +15,10 @@ class Body extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: SizeConfig.screenHeight * 0.04), // 4%
-                Text("Register Account", style: headingStyle),
-                Text(
-                  "Complete your details",
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: SizeConfig.screenHeight * 0.08),
-                SignUpForm(),
+                SizedBox(height: 10),
+                Text("Account Settings", style: headingStyle),
+                SizedBox(height: 30),
+                AccountForm(),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
               ],
             ),

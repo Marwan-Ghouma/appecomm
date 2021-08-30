@@ -13,7 +13,8 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold();
+    /*Padding(
       padding:
           EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
       child: ListView.builder(
@@ -45,6 +46,6 @@ class _BodyState extends State<Body> {
           ),
         ),
       ),
-    );
+    );*/
   }
 }

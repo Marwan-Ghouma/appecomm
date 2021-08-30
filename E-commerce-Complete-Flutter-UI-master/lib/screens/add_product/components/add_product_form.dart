@@ -24,8 +24,14 @@ class _ProductFormState extends State<ProductForm> {
   String dropdownValue;
   String productName;
   String productPrice;
-  String email;
-  List<String> _categories = ['Catg1', 'Catg2', 'Catg3', 'Catg4'];
+  String productDesc;
+  List<String> _categories = [
+    'Santé et Beauté',
+    'Produits animaliers',
+    'Plantes aromatiques et médicinales',
+    'Produits artisanaux',
+    'Plats traditionnels'
+  ];
   File _image;
   final List<String> errors = [];
 
@@ -51,6 +57,8 @@ class _ProductFormState extends State<ProductForm> {
       child: Column(
         children: [
           buildProductNameFormField(),
+          SizedBox(height: getProportionateScreenHeight(30)),
+          buildProductDescriptionFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildProductPriceFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
@@ -99,8 +107,8 @@ class _ProductFormState extends State<ProductForm> {
                         //upload to firestore
                         //print('$productName $productPrice');
                         EasyLoading.dismiss();
-                        _provider.saveProductToDB(
-                            productName, productPrice, dropdownValue);
+                        _provider.saveProductToDB(productName, productPrice,
+                            dropdownValue, productDesc);
                         print('PRINT SUCCESS');
                         Navigator.pushNamed(context, HomeScreen.routeName);
                       } else {
@@ -145,6 +153,32 @@ class _ProductFormState extends State<ProductForm> {
     );
   }
 
+  TextFormField buildProductDescriptionFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.multiline,
+      onSaved: (newValue) => productDesc = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: "Enter the product description");
+        }
+        return null;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: "Enter the product description");
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Product Description",
+        hintText: "Enter the product description",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+      ),
+    );
+  }
+
   TextFormField buildProductPriceFormField() {
     return TextFormField(
       keyboardType: TextInputType.number,
@@ -168,40 +202,6 @@ class _ProductFormState extends State<ProductForm> {
         hintText: "Enter the product price",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
-      ),
-    );
-  }
-
-  TextFormField buildEmailFormField() {
-    return TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
-      onChanged: (value) {
-        if (value.isNotEmpty) {
-          print('EMAIL : $email');
-          removeError(error: kEmailNullError);
-        } else if (emailValidatorRegExp.hasMatch(value)) {
-          removeError(error: kInvalidEmailError);
-        }
-        return null;
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          addError(error: kEmailNullError);
-          return "";
-        } else if (!emailValidatorRegExp.hasMatch(value)) {
-          addError(error: kInvalidEmailError);
-          return "";
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
+import 'package:shop_app/models/Product.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
 import 'package:shop_app/services/auth.dart';
 
@@ -53,16 +54,14 @@ class ProductProvider extends ChangeNotifier {
   }
 
   //save product to DB
-  Future<void> saveProductToDB(
-      String productName, String productPrice, String dropdownValue) async {
+  Future<void> saveProductToDB(String productName, String productPrice,
+      String dropdownValue, String productDesc) async {
     User user = FirebaseAuth.instance.currentUser;
     var timeStamp = DateTime.now().microsecondsSinceEpoch; //product ID
     CollectionReference productsCollection =
         FirebaseFirestore.instance.collection('products');
 
     try {
-      print('PRODUCT NAME : $productName');
-      print('PRODUCT PRICE : $productPrice');
       await productsCollection.doc(timeStamp.toString()).set({
         'productID': timeStamp.toString(),
         'seller': user.uid,
@@ -70,6 +69,7 @@ class ProductProvider extends ChangeNotifier {
         'productName': productName,
         'category': dropdownValue,
         'productImage': productUrl,
+        'description': productDesc,
       });
       print('PRODUCT SAVED SUCCESSFULLY');
     } catch (e) {
@@ -79,7 +79,50 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Stream<QuerySnapshot> get products {
-    return productsCollection.snapshots();
+  Future getAllProductsList() async {
+    List itemsList = [];
+
+    try {
+      await productsCollection.get().then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          itemsList.add(Product(
+              id: element.data()['productID'],
+              image: element.data()['productImage'],
+              title: element.data()['productName'],
+              price: element.data()['price'],
+              description: element.data()['description'],
+              category: element.data()['category']));
+        });
+      });
+      return itemsList;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getProductsList(String ctg) async {
+    List itemsList = [];
+
+    try {
+      await productsCollection
+          .where('category', isEqualTo: ctg)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          itemsList.add(Product(
+              id: element.data()['productID'],
+              image: element.data()['productImage'],
+              title: element.data()['productName'],
+              price: element.data()['price'],
+              description: element.data()['description'],
+              category: element.data()['category']));
+        });
+      });
+      return itemsList;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 }

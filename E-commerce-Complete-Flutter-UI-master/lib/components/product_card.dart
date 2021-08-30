@@ -20,7 +20,8 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
+      padding:
+          EdgeInsets.only(left: getProportionateScreenWidth(20), bottom: 20.0),
       child: SizedBox(
         width: getProportionateScreenWidth(width),
         child: GestureDetector(
@@ -42,7 +43,7 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Hero(
                     tag: product.id.toString(),
-                    child: Image.asset(product.images[0]),
+                    child: Image.network(product.image),
                   ),
                 ),
               ),
