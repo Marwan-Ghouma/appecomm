@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shop_app/screens/cart/cart_screen.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
 import 'package:shop_app/screens/presentation.dart';
 import 'package:shop_app/screens/profile/profile_screen.dart';
@@ -40,11 +41,21 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: SvgPicture.asset("assets/icons/Cart Icon.svg"),
+                icon: SvgPicture.asset("assets/icons/Shop Icon.svg"),
                 onPressed: () {
                   Navigator.pushNamed(context, HomeScreen.routeName);
                 },
               ),
+              IconButton(
+                  icon: SvgPicture.asset(
+                    "assets/icons/Cart Icon.svg",
+                    color: MenuState.home == selectedMenu
+                        ? kPrimaryColor
+                        : inActiveIconColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, CartScreen.routeName);
+                  }),
               IconButton(
                 icon: SvgPicture.asset(
                   "assets/icons/User Icon.svg",
