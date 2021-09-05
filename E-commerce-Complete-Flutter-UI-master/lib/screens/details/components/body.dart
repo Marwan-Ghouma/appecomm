@@ -6,6 +6,8 @@ import 'color_dots.dart';
 import 'product_description.dart';
 import 'top_rounded_container.dart';
 import 'product_images.dart';
+import 'package:shop_app/screens/cart/cart_screen.dart';
+import 'package:shop_app/helper/ttp.dart';
 
 class Body extends StatelessWidget {
   final Product product;
@@ -34,17 +36,24 @@ class Body extends StatelessWidget {
                     TopRoundedContainer(
                       color: Colors.white,
                       child: Padding(
-                        padding: EdgeInsets.only(
-                          left: SizeConfig.screenWidth * 0.15,
-                          right: SizeConfig.screenWidth * 0.15,
-                          bottom: getProportionateScreenWidth(40),
-                          top: getProportionateScreenWidth(15),
-                        ),
-                        child: DefaultButton(
-                          text: "Add To Cart",
-                          press: () {},
-                        ),
-                      ),
+                          padding: EdgeInsets.only(
+                            left: SizeConfig.screenWidth * 0.15,
+                            right: SizeConfig.screenWidth * 0.15,
+                            bottom: getProportionateScreenWidth(40),
+                            top: getProportionateScreenWidth(15),
+                          ),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.blue,
+                              onSurface: Colors.red,
+                            ),
+                            onPressed: () {
+                              addproduct(product);
+                              Navigator.pushNamed(
+                                  context, CartScreen.routeName);
+                            },
+                            child: Text('ADD to Chart'),
+                          )),
                     ),
                   ],
                 ),
