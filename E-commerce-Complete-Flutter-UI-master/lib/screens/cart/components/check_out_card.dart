@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop_app/components/default_button.dart';
-
+import 'package:shop_app/helper/ttp.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
+
+import 'package:shop_app/screens/cart/cart_screen.dart';
 
 class CheckoutCard extends StatelessWidget {
   const CheckoutCard({
@@ -46,7 +48,7 @@ class CheckoutCard extends StatelessWidget {
                     text: "Total:\n",
                     children: [
                       TextSpan(
-                        text: "\$337.15",
+                        text: '$ttp',
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ],
